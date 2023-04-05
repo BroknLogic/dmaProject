@@ -82,7 +82,7 @@ def visualizeNetwork(nodes, edges):
     app.run_server(debug=True)
 
 def breadth_first(Nodes: list[Node]):
-    queue = deque()
+    queue = []
     source = Nodes[0]
     destination = Nodes[-1]
     visited = {}
@@ -90,8 +90,7 @@ def breadth_first(Nodes: list[Node]):
     queue.append(source)
     
     while (len(queue)> 0):
-        current = queue.popleft()
-        
+        current = queue.pop(0) 
         for edge in current.edges:
             to_node = edge['to']
             if to_node not in visited:
@@ -114,10 +113,7 @@ def main():
 
     extraEdges = 20
     edges = getEdges(nodes, extraEdges)
-    for node in nodes:
-        print(node.id)
-        for edge in node.edges:
-            print(edge)
+
     try:
         print(breadth_first(nodes))
     except:
