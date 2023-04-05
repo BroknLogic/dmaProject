@@ -42,7 +42,7 @@ def getEdges(nodes, extraEdges):
                 'mean': mean,
                 'stdDev': stdDev
             }
-            node.addEdge(edge)
+            nodes[int(source)].addEdge(edge)
             nodes[int(target)].addEdge(edge2)
             edges.append(edge)
             nodesAdded.append(node.getId())
