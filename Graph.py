@@ -6,6 +6,8 @@ from dash.dependencies import Input, Output, State
 import random
 from Node import Node
 from Edge import Edge
+import numpy as np
+
 
 
 class Graph:
@@ -13,7 +15,20 @@ class Graph:
     def __init__(self, nodeCount: int, extraEdges: int):
         self.nodes, self.dashNodes = self.makeNodes(nodeCount)
         self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges)
+        self.random = np.random.normal
     
+    
+    def samplePath(self, path: list[str]) -> list[float]:
+        samples = []
+        for i, node_id in enumerate(path[:-1]):
+            node = self.nodes[int(node_id)]
+            
+            for edge in node.getEdges():
+                if edge.getId() == node_id + '__' + path[i+1]:
+                    samples.append(self.random(*edge.randParams()))
+                    break
+            
+            
     
     def getNodes(self) -> list[Node]:
         return self.nodes
