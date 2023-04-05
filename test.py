@@ -7,6 +7,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 import random
 from Node import Node
+from collections import deque
 
 
 def getNodes(nodeCount):
@@ -78,6 +79,7 @@ def visualizeNetwork(nodes, edges):
         return {'nodes':{'color': x}}
     
     app.run_server(debug=True)
+
 
 def main():
     nodeCount = 20

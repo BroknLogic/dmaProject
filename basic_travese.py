@@ -89,7 +89,7 @@ def breadth_first(Nodes: list[Node]):
     visited[source.getId()] =  np.inf
     queue.append(source)
     
-    while (not queue.empty()):
+    while (len(queue)> 0):
         current = queue.popleft()
         
         for edge in current.edges:
@@ -97,6 +97,7 @@ def breadth_first(Nodes: list[Node]):
             if to_node not in visited:
                 queue.append(Nodes[int(to_node)])
                 visited[to_node] = current.getId()
+        print(queue)
     path = [visited[destination.getId()]]
     
     while path[-1] != source.getId():
@@ -117,8 +118,10 @@ def main():
         print(node.id)
         for edge in node.edges:
             print(edge)
-
-    print(breadth_first(nodes))
+    try:
+        print(breadth_first(nodes))
+    except:
+        pass
     
     visualizeNetwork(dashNodes, edges)
 
