@@ -43,7 +43,7 @@ def getEdges(nodes, extraEdges):
                 'stdDev': stdDev
             }
             node.addEdge(edge)
-            nodes[int(target)].addEdge(edge2)
+            nodes[int(source)].addEdge(edge2)
             edges.append(edge)
             nodesAdded.append(node.getId())
     edgeNum = len(edges)
@@ -107,7 +107,7 @@ def breadth_first(Nodes: list[Node]):
                 queue.append(Nodes[int(to_node)])
                 visited[to_node] = current.getId()
     
-    path = [visited[destination.getId()]]
+    path = [destination.getId()]
     
     while path[-1] != source.getId():
         path.append(visited[path[-1]])
@@ -123,7 +123,9 @@ def main():
 
     extraEdges = 20
     edges = getEdges(nodes, extraEdges)
-
+    for node in nodes:
+        for edge in node.getEdges():
+            print(edge)
     try:
         print(breadth_first(nodes))
     except:
