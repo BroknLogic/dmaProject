@@ -2,6 +2,7 @@
 import dash
 import visdcc
 import pandas as pd
+import numpy as np
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
@@ -84,15 +85,30 @@ def breadth_first(Nodes: list[Node]):
     queue = deque()
     source = Nodes[0]
     destination = Nodes[-1]
-    
+    visited = {}
+    visited[source.getId()] =  np.inf
     queue.append(source)
+    
+
     while (not queue.empty()):
         current = queue.popleft()
+        
         for edge in current.edges:
-            if (edge[] == destination):
-                return True
-            else:
-                queue.append(edge.to)
+            to_node = edge['to']
+            if (to_node == destination.getId()):
+                break
+            elif to_node not in visited:
+                queue.append(Nodes[int(to_node)])
+                visited[to_node] = current
+    path = [visited[destination.getId()]]
+    
+    while path[-1] != source.getId():
+        path.append(visited[path[-1]])
+    
+    path.reverse()
+    return path
+        
+        
 
 def main():
     nodeCount = 20
@@ -105,6 +121,8 @@ def main():
         for edge in node.edges:
             print(edge)
 
+    print(breadth_first(nodes))
+    
     visualizeNetwork(dashNodes, edges)
 
     
