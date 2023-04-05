@@ -11,6 +11,14 @@ from Node import Node
 from collections import deque
 
 
+def realPath(source, target, q):
+    # Make a real path to from source to target
+    # poll Q values and update q graph
+    # return real time
+    pass
+
+
+
 def getNodes(nodeCount):
     nodes = [Node(str(i)) for i in range(nodeCount)]
     dashNodes = [{'id': str(i), 'label': str(i), 'shape': 'dot', 'size': 7} for i in range(nodeCount)]
@@ -99,6 +107,8 @@ def visualizeNetwork(nodes, edges):
         return {'nodes':{'color': x}}
     
     app.run_server(debug=True)
+
+
 
 def breadth_first(Nodes: list[Node]):
     queue = []
