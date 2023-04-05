@@ -40,6 +40,7 @@ class Graph:
                 mean = random.randrange(1, 7)
                 stdDev = random.randrange(1, 7)
                 edge = Edge(source, target, mean, stdDev)
+                print(edge)
                 edge2 = Edge(target, source, mean, stdDev)
                 nodes[int(source)].addEdge(edge)
                 nodes[int(target)].addEdge(edge2)
@@ -53,7 +54,7 @@ class Graph:
             edge2 = Edge(target, source, mean, stdDev)
             contains = False
             for testEdge in edges:
-                if testEdge.getId() == edge.getId or testEdge.getTarget() + '__' + testEdge.getSource() == edge.getId():
+                if testEdge.getId() == edge.getId() or testEdge.getTarget() + '__' + testEdge.getSource() == edge.getId():
                     contains = True
             if not contains and source != target:
                 edges.append(edge)

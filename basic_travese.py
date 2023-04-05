@@ -40,10 +40,6 @@ def main():
     #    for edge in node.getEdges():
     #        print(edge.toDict())
     
-    edges = [edge for edge in graph.getEdges()]
-    edges.sort()
-    for edge in edges:
-        print(edge)
         
     print(breadth_first(nodes))
     
