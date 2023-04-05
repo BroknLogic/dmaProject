@@ -43,7 +43,7 @@ def getEdges(nodes, extraEdges):
                 'stdDev': stdDev
             }
             node.addEdge(edge)
-            nodes[int(source)].addEdge(edge2)
+            nodes[int(target)].addEdge(edge2)
             edges.append(edge)
             nodesAdded.append(node.getId())
     edgeNum = len(edges)
@@ -58,6 +58,14 @@ def getEdges(nodes, extraEdges):
             'mean': mean,
             'stdDev': random.randrange(1, 7)
         }
+        edge2 = {
+            'id': target + "__" + source,
+            'from': target,
+            'to': source,
+            'width': mean, 
+            'mean': mean,
+            'stdDev': stdDev
+        }
         contains = False
         for testEdge in edges:
             if testEdge['id'] == edge['id'] or testEdge['to'] + '__' + testEdge['from'] == edge['id']:
@@ -65,6 +73,7 @@ def getEdges(nodes, extraEdges):
         if not contains and source != target:
             edges.append(edge)
             nodes[int(source)].addEdge(edge)
+            nodes[int(target)].addEdge(edge2)
     return edges
 
 
