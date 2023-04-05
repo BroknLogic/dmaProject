@@ -1,5 +1,6 @@
 from Node import Node
 from Graph import Graph
+from Edge import Edge
 import numpy as np
 
 def breadth_first(Nodes: list[Node]):
@@ -13,7 +14,7 @@ def breadth_first(Nodes: list[Node]):
     while (len(queue)> 0):
         current = queue.pop(0) 
         for edge in current.getEdges():
-            to_node = edge['to']
+            to_node = edge.getTarget()
             if to_node not in visited:
                 queue.append(Nodes[int(to_node)])
                 visited[to_node] = current.getId()
@@ -34,6 +35,16 @@ def main():
     graph = Graph(nodeCount, extraEdges)
     nodes = graph.getNodes()
     
+    # for node in nodes:
+    #    print(node.getId())
+    #    for edge in node.getEdges():
+    #        print(edge.toDict())
+    
+    edges = [edge for edge in graph.getEdges()]
+    edges.sort()
+    for edge in edges:
+        print(edge)
+        
     print(breadth_first(nodes))
     
     graph.visualizeNetwork()
