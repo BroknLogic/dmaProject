@@ -50,7 +50,7 @@ def getEdges(nodes, extraEdges):
         }
         contains = False
         for testEdge in edges:
-            if testEdge['id'] == edge['id']:
+            if testEdge['id'] == edge['id'] or testEdge['to'] + '__' + testEdge['from'] == edge['id']:
                 contains = True
         if not contains and source != target:
             edges.append(edge)
