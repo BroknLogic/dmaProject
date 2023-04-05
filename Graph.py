@@ -1,7 +1,5 @@
 import dash
 import visdcc
-import pandas as pd
-import numpy as np
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
@@ -16,21 +14,21 @@ class Graph:
         self.edges = self.makeEdges(self.nodes, extraEdges)
     
     
-    def getNodes(self):
+    def getNodes(self) -> list[Node]:
         return self.nodes
     
-    def getDashNodes(self):
+    def getDashNodes(self) -> dict[str,str]:
         return self.dashNodes
     
-    def getEdges(self):
+    def getEdges(self) -> dict[str, str]:
         return self.edges
     
-    def makeNodes(self, nodeCount: int):
+    def makeNodes(self, nodeCount: int) -> tuple[list[Node], dict[str,str]]:
         nodes = [Node(str(i)) for i in range(nodeCount)]
         dashNodes = [{'id': str(i), 'label': str(i), 'shape': 'dot', 'size': 7} for i in range(nodeCount)]
         return nodes, dashNodes
 
-    def makeEdges(self, nodes: list[Node], extraEdges: int):
+    def makeEdges(self, nodes: list[Node], extraEdges: int) -> dict[str, str]:
         nodesAdded = []
         edges = []
         for node in nodes:
@@ -91,7 +89,7 @@ class Graph:
         return edges
 
 
-    def visualizeNetwork(self):
+    def visualizeNetwork(self) -> None:
         app = dash.Dash()
 
         # define layout

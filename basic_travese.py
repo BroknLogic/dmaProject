@@ -1,6 +1,6 @@
 from Node import Node
 from Graph import Graph
-
+import numpy as np
 
 def breadth_first(Nodes: list[Node]):
     queue = []
@@ -32,12 +32,11 @@ def main():
     nodeCount = 20
     extraEdges = 20
     graph = Graph(nodeCount, extraEdges)
-    nodes = graph.getNodes(nodeCount)
-    edges = graph.getEdges(nodes, extraEdges)
+    nodes = graph.getNodes()
     
     print(breadth_first(nodes))
     
-    graph.visualizeNetwork(graph.getDashNodes(), edges)
+    graph.visualizeNetwork()
 
     
 # define main calling
