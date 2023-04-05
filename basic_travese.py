@@ -7,6 +7,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 import random
 from Node import Node
+from collections import deque
 
 
 def getNodes(nodeCount):
@@ -78,6 +79,20 @@ def visualizeNetwork(nodes, edges):
         return {'nodes':{'color': x}}
     
     app.run_server(debug=True)
+
+def breadth_first(Nodes: list[Node]):
+    queue = deque()
+    source = Nodes[0]
+    destination = Nodes[-1]
+    
+    queue.append(source)
+    while (not queue.empty()):
+        current = queue.popleft()
+        for edge in current.edges:
+            if (edge[] == destination):
+                return True
+            else:
+                queue.append(edge.to)
 
 def main():
     nodeCount = 20
