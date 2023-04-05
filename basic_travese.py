@@ -25,15 +25,25 @@ def getEdges(nodes, extraEdges):
         else:
             source, target = random.choice(nodesAdded), node.id
             mean = random.randrange(1, 7)
+            stdDev = random.randrange(1, 7)
             edge = {
                 'id': source + "__" + target,
                 'from': source,
                 'to': target,
                 'width': mean, 
                 'mean': mean,
-                'stdDev': random.randrange(1, 7)
+                'stdDev': stdDev
+            }
+            edge2 = {
+                'id': target + "__" + source,
+                'from': target,
+                'to': source,
+                'width': mean, 
+                'mean': mean,
+                'stdDev': stdDev
             }
             node.addEdge(edge)
+            nodes[int(target)].addEdge(edge2)
             edges.append(edge)
             nodesAdded.append(node.getId())
     edgeNum = len(edges)
