@@ -89,17 +89,14 @@ def breadth_first(Nodes: list[Node]):
     visited[source.getId()] =  np.inf
     queue.append(source)
     
-
     while (not queue.empty()):
         current = queue.popleft()
         
         for edge in current.edges:
             to_node = edge['to']
-            if (to_node == destination.getId()):
-                break
-            elif to_node not in visited:
+            if to_node not in visited:
                 queue.append(Nodes[int(to_node)])
-                visited[to_node] = current
+                visited[to_node] = current.getId()
     path = [visited[destination.getId()]]
     
     while path[-1] != source.getId():
