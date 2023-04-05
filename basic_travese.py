@@ -19,12 +19,12 @@ def realPath(source, target, q):
 
 
 
-def getNodes(nodeCount):
+def getNodes(nodeCount: int):
     nodes = [Node(str(i)) for i in range(nodeCount)]
     dashNodes = [{'id': str(i), 'label': str(i), 'shape': 'dot', 'size': 7} for i in range(nodeCount)]
     return nodes, dashNodes
 
-def getEdges(nodes, extraEdges):
+def getEdges(nodes: list[Node], extraEdges: int):
     nodesAdded = []
     edges = []
     for node in nodes:
