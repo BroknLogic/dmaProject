@@ -27,6 +27,14 @@ class Graph:
                     samples.append(max(0, self.random(*edge.randParams())))
                     break
         return samples
+    
+    def generateQMatrix(self) -> list[list[float]]:
+        qMatrix = [[0.0 for i in range(len(self.nodes))] for j in range(len(self.nodes))]
+        for node in self.nodes:
+            for edge in node.getEdges():
+                qMatrix[int(node.getId())][int(edge.getTarget())] = 1.0
+
+        return qMatrix
             
     def getNodes(self) -> list[Node]:
         return self.nodes

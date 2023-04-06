@@ -45,7 +45,11 @@ def main():
     print(path)
     sample = graph.samplePath(path)
     print(sample)
-    
+
+    q = graph.generateQMatrix()
+    for row in q:
+        print(row)
+
     graph.visualizeNetwork()
 
     
