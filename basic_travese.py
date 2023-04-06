@@ -35,13 +35,16 @@ def main():
     graph = Graph(nodeCount, extraEdges)
     nodes = graph.getNodes()
     
-    # for node in nodes:
-    #    print(node.getId())
-    #    for edge in node.getEdges():
-    #        print(edge.toDict())
+    for node in nodes:
+        print(node.getId())
+        for edge in node.getEdges():
+            print(edge.toDict())
     
         
-    print(breadth_first(nodes))
+    path = breadth_first(nodes)
+    print(path)
+    sample = graph.samplePath(path)
+    print(sample)
     
     graph.visualizeNetwork()
 

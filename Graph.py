@@ -25,11 +25,10 @@ class Graph:
             
             for edge in node.getEdges():
                 if edge.getId() == node_id + '__' + path[i+1]:
-                    samples.append(self.random(*edge.randParams()))
+                    samples.append(max(0, self.random(*edge.randParams())))
                     break
+        return samples
             
-            
-    
     def getNodes(self) -> list[Node]:
         return self.nodes
     
@@ -55,7 +54,6 @@ class Graph:
                 mean = random.randrange(1, 7)
                 stdDev = random.randrange(1, 7)
                 edge = Edge(source, target, mean, stdDev)
-                print(edge)
                 edge2 = Edge(target, source, mean, stdDev)
                 nodes[int(source)].addEdge(edge)
                 nodes[int(target)].addEdge(edge2)
