@@ -40,12 +40,16 @@ def main():
         for edge in node.getEdges():
             print(edge.toDict())
     
-        
+    
     path = breadth_first(nodes)
     print(path)
     sample = graph.samplePath(path)
     print(sample)
-    
+
+    q = graph.getBlankQMatrix()
+    for row in q:
+        print(row)
+
     graph.visualizeNetwork()
 
     

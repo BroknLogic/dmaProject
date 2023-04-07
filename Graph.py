@@ -21,13 +21,20 @@ class Graph:
     def samplePath(self, path: list[str]) -> list[float]:
         samples = []
         for i, node_id in enumerate(path[:-1]):
-            node = self.nodes[int(node_id)]
-            
+            node = self.nodes[int(node_id)] 
             for edge in node.getEdges():
                 if edge.getId() == node_id + '__' + path[i+1]:
                     samples.append(max(0, self.random(*edge.randParams())))
                     break
         return samples
+    
+    def getBlankQMatrix(self, default_val: float = 1.0) -> np.ndarray[np.ndarray[float]]:
+        qMatrix = np.zeros((len(self.nodes), len(self.nodes)))
+        for node in self.nodes:
+            for edge in node.getEdges():
+                qMatrix[int(node.getId())][int(edge.getTarget())] = default_val
+
+        return qMatrix
             
     def getNodes(self) -> list[Node]:
         return self.nodes
@@ -43,7 +50,7 @@ class Graph:
         dashNodes = [{'id': str(i), 'label': str(i), 'shape': 'dot', 'size': 7} for i in range(nodeCount)]
         return nodes, dashNodes
 
-    def makeEdges(self, nodes: list[Node], extraEdges: int) -> dict[str, str]:
+    def makeEdges(self, nodes: list[Node], extraEdges: int, len_range: tuple[int, int] = (5, 20)) -> dict[str, str]:
         nodesAdded = []
         edges: list[Edge]= []
         for node in nodes:
@@ -51,8 +58,8 @@ class Graph:
                 nodesAdded.append(node.id)
             else:
                 source, target = random.choice(nodesAdded), node.id
-                mean = random.randrange(1, 7)
-                stdDev = random.randrange(1, 7)
+                mean = random.randrange(*len_range)
+                stdDev =  mean//4
                 edge = Edge(source, target, mean, stdDev)
                 edge2 = Edge(target, source, mean, stdDev)
                 nodes[int(source)].addEdge(edge)
@@ -62,7 +69,8 @@ class Graph:
         edgeNum = len(edges)
         while len(edges) < edgeNum + extraEdges:
             source, target = random.choice(nodesAdded), random.choice(nodesAdded)
-            mean = random.randrange(1, 7)
+            mean = random.randrange(*len_range)
+            stdDev = random.randrange(1, max(mean//4, 2))
             edge = Edge(source, target, mean, stdDev)
             edge2 = Edge(target, source, mean, stdDev)
             contains = False
