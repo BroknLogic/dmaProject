@@ -10,7 +10,7 @@ class OptimalScheduler:
         self.epsilon = epsilon
         self.gamma = gamma
     
-
+    '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, target: str, source: str, path_dict: dict[str, list[str]]) -> list[str]:
         path = [target]
         used_edges = []
@@ -36,7 +36,8 @@ class OptimalScheduler:
 
     def antColonyPath(self, target: str, source: str):
         pass
-
+    
+    '''Method for updating the Q matrix given a path'''
     def updateQMatrix(self, path: list[str]) -> None:
         path_sample = self.graph.samplePath(path)
         for i in range(len(path)-2):
