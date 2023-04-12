@@ -64,6 +64,7 @@ class OptimalScheduler:
             len_of_path += current_cost
         for i in range(len(path) - 2):
             pheromone_graph[path[i]][path[i+1]] += 1/len_of_path
+            pheromone_graph[path[i+1]][path[i]] += 1/len_of_path
 
     def decay(self, pheromone_graph) -> None:
         for i in range(len(pheromone_graph)):
