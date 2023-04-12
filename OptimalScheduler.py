@@ -53,7 +53,7 @@ class OptimalScheduler:
         random_value = np.random.uniform(0.0,1.0)
 
         for i in range(len(cutoffs)):
-            if random_value < cutoffs[i]:
+            if random_value <= cutoffs[i]:
                 return connected_nodes[i]
         raise Exception("No node was chosen")
     
