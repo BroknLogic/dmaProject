@@ -116,3 +116,22 @@ class OptimalScheduler:
             n = self.useMatrix[int(path[i])][int(path[i+1])]
             old_val = self.qMatrix[int(path[i])][int(path[i+1])]
             self.qMatrix[int(path[i])][int(path[i+1])] = (old_val * (n - 1) + path_sample[i]) / n 
+
+if __name__ == "__main__":
+    nodeCount = 20
+    extraEdges = 20
+    graph = Graph(nodeCount, extraEdges)
+    nodes = graph.getNodes()
+    
+    for node in nodes:
+        print(node.getId())
+        for edge in node.getEdges():
+            print(edge.toDict())
+    
+    OptimalScheduler_ = OptimalScheduler(graph, graph.getBlankQMatrix(1.0))
+    targets = [i for i in range(1, nodeCount)]
+    path_dict = OptimalScheduler_.getSSSP(0, targets)
+    print(path_dict)
+    
+
+    graph.visualizeNetwork()
