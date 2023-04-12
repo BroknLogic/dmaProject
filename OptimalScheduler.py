@@ -1,6 +1,7 @@
 import numpy as np
 from Graph import Graph
 from Edge import Edge
+from Node import Node
 
 class OptimalScheduler:
 
@@ -39,10 +40,46 @@ class OptimalScheduler:
         path.reverse()
         self.epsilon -= self.gamma
         return path
+    
+    def calc_choice(self, curr_pos: int, pheromone_graph: list[list[float]]) -> int:
+        node_idx = curr_pos
+        row_of_node = self.qMatrix[node_idx]
+        connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0]
+        phero_vals = [pheromone_graph[node_idx][i] for i in connected_nodes]
+        sum_vals = sum(phero_vals)
+        prob_values = [i/sum_vals for i in phero_vals]
+        cutoffs = [sum(prob_values[:i+1]) for i in range(len(prob_values))]
+        random_value = np.random.uniform(0.0,1.0)
+
+        for i in range(len(cutoffs)):
+            if random_value < cutoffs[i]:
+                return connected_nodes[i]
+        raise Exception("No node was chosen")
+    
+    def calc_pheromone_value(self, path: list[int], pheromone_graph) -> None:
+        len_of_path = 0
+        for i in range(len(path) - 2):
+            current_cost = self.qMatrix[path[i]][path[i+1]]
+            len_of_path += current_cost
+        for i in range(len(path) - 2):
+            pheromone_graph[path[i]][path[i+1]] += 1/len_of_path
+
+    def decay(self, pheromone_graph) -> None:
+        for i in range(len(pheromone_graph)):
+            for j in range(len(pheromone_graph[i])):
+                pheromone_graph[i][j] *= 0.9
+            
+            
+        
+
+                
+        
+
 
 
     def antColonyPath(self, target: str, source: str):
-        pass
+        pheromon_graph = self.graph.getBlankQMatrix(1.)
+
     
     '''Method for updating the Q matrix given a path'''
     def updateQMatrix(self, path: list[str]) -> None:
