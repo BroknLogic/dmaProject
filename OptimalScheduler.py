@@ -68,14 +68,6 @@ class OptimalScheduler:
         for i in range(len(pheromone_graph)):
             for j in range(len(pheromone_graph[i])):
                 pheromone_graph[i][j] *= 0.9
-            
-            
-        
-
-                
-        
-
-
 
     def antColonyPath(self, target: str, source: str):
         pheromon_graph = self.graph.getBlankQMatrix(1.)
