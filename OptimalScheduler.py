@@ -42,10 +42,10 @@ class OptimalScheduler:
         self.epsilon -= self.gamma
         return path
     
-    def calc_choice(self, curr_pos: int, pheromone_graph: list[list[float]]) -> int:
+    def calc_choice(self, curr_pos: int, pheromone_graph: list[list[float]], visited: list[int]) -> int:
         node_idx = curr_pos
         row_of_node = self.qMatrix[node_idx]
-        connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0]
+        connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0 and i not in visited]
         phero_vals = [pheromone_graph[node_idx][i] for i in connected_nodes]
         sum_vals = sum(phero_vals)
         prob_values = [i/sum_vals for i in phero_vals]
@@ -74,7 +74,7 @@ class OptimalScheduler:
     def find_ants_path(self, target: str, curr_pos: int, pheromone_graph: list[list[float]]):
         path = [curr_pos]
         while path[-1] != target:
-            next_node = self.calc_choice(path[-1], pheromone_graph)
+            next_node = self.calc_choice(path[-1], pheromone_graph, path)
             path.append(next_node)
         return path
 
