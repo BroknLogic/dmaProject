@@ -69,6 +69,13 @@ class OptimalScheduler:
         for i in range(len(pheromone_graph)):
             for j in range(len(pheromone_graph[i])):
                 pheromone_graph[i][j] *= 0.9
+    
+    def find_ants_path(self, target: str, curr_pos: int, pheromone_graph: list[list[float]]):
+        path = [curr_pos]
+        while path[-1] != target:
+            next_node = self.calc_choice(path[-1], pheromone_graph)
+            path.append(next_node)
+        return path
 
     def populate_pheromones(self, target: str, source: str):
         pheromone_graph = self.graph.getBlankQMatrix(1.)
