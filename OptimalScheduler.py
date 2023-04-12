@@ -1,5 +1,6 @@
 import numpy as np
 from Graph import Graph
+from Edge import Edge
 
 class OptimalScheduler:
 
@@ -13,7 +14,7 @@ class OptimalScheduler:
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, target: str, source: str, path_dict: dict[str, list[str]]) -> list[str]:
         path = [target]
-        used_edges = []
+        used_edges: list[str] = []
         while path[-1] != source:
             # Epsilon Greedy
             if np.random.uniform(0.0,1.0) < self.epsilon:
@@ -30,8 +31,8 @@ class OptimalScheduler:
                 used_edges.append(edge.getTarget() + '__' + edge.getSource())
             else:
                 target = path_dict[path[-1]][-2]
-                used_edges.append(path[-1] + '__' + target)
-                used_edges.append(target + '__' + path[-1])
+                used_edges.append(f"{path[-1]}__{target}")
+                used_edges.append(f"{target}__{path[-1]}")
                 path.append(target)
                 
 
