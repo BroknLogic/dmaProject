@@ -5,12 +5,13 @@ from Node import Node
 
 class OptimalScheduler:
 
-    def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], epsilon: float = 0.5, gamma: float = 0.01):
+    def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], epsilon: float = 0.5, gamma: float = 0.01, number_of_ants: int = 100):
         self.graph = graph
         self.qMatrix = qMatrix
         self.useMatrix = np.zeros_like(qMatrix)
         self.epsilon = epsilon
         self.gamma = gamma
+        self.number_of_ants = number_of_ants
     
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, target: str, source: str, path_dict: dict[str, list[str]]) -> list[str]:
@@ -69,8 +70,10 @@ class OptimalScheduler:
             for j in range(len(pheromone_graph[i])):
                 pheromone_graph[i][j] *= 0.9
 
-    def antColonyPath(self, target: str, source: str):
-        pheromon_graph = self.graph.getBlankQMatrix(1.)
+    def populate_pheromones(self, target: str, source: str):
+        pheromone_graph = self.graph.getBlankQMatrix(1.)
+        for i in range(self.number_of_ants):
+
 
     
     '''Method for updating the Q matrix given a path'''
