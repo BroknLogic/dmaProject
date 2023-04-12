@@ -1,7 +1,7 @@
 import numpy as np
 from Graph import Graph
 
-class MonteCarloScheduler:
+class MonteCarlo:
 
     def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], gamma: float = 0.01):
         self.graph = graph
