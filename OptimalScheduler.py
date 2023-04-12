@@ -71,24 +71,40 @@ class OptimalScheduler:
             for j in range(len(pheromone_graph[i])):
                 pheromone_graph[i][j] *= 0.9
     
-    def find_ants_path(self, target: str, curr_pos: int, pheromone_graph: list[list[float]]):
+    def find_ants_path(self, curr_pos: int, target: int, pheromone_graph: list[list[float]]):
         path = [curr_pos]
         while path[-1] != target:
             next_node = self.calc_choice(path[-1], pheromone_graph, path)
             path.append(next_node)
         return path
 
-    def populate_pheromones(self, target: str, source: str):
+    def populate_pheromones(self, source: int, target: int):
         pheromone_graph = self.graph.getBlankQMatrix(1.)
         for i in range(self.number_of_ants):
-            path = self.find_ants_path(target, int(source), pheromone_graph)
+            path = self.find_ants_path(source, target, pheromone_graph)
             self.calc_pheromone_value(path, pheromone_graph)
             self.decay(pheromone_graph)
         
+        return self.getPhermonePath(target, source, pheromone_graph)
 
+    def getPheremonePath(self, source: int, target: int, pheremone_graph: list[list[float]]) -> list[int]:
+        path = [source]
+        while path[-1] != target:
+            next_node = np.argmax(pheremone_graph[int(path[-1])])
+            path.append(next_node)
+        
+        return path
 
-
-
+    def getSSSP(self, source: int, target_nodes: list[int]) -> dict[str, list[str]]:
+        path_dict = {}
+        for node in target_nodes:
+            if node in path_dict:
+                continue
+            path = self.populate_pheromones(source, node)
+            for i in range(len(path) - 1, 0, -1):
+                if path[i] not in path_dict:
+                    path_dict[str(path[i])] = path[0:i+1]
+        return path_dict
     
     '''Method for updating the Q matrix given a path'''
     def updateQMatrix(self, path: list[str]) -> None:
