@@ -18,7 +18,7 @@ class OptimalScheduler:
             # Epsilon Greedy
             if np.random.uniform(0.0,1.0) < self.epsilon:
                 # get all of the edges for the current node
-                node_edges = [edge for edge in self.graph.getNodes()[int(path[-1])].getEdges()]
+                node_edges = self.graph.getNodes()[int(path[-1])].getEdges()
                 # remove an edge if it was already traversed
                 for edge in node_edges:
                     if edge.getId() in used_edges:
@@ -26,8 +26,14 @@ class OptimalScheduler:
                 # pick edge and add target to path
                 edge = np.random.choice(node_edges)
                 path.append(edge.getTarget())
+                used_edges.append(edge.getId())
+                used_edges.append(edge.getTarget() + '__' + edge.getSource())
             else:
-                path.append(path_dict[path[-1]][-2])
+                target = path_dict[path[-1]][-2]
+                used_edges.append(path[-1] + '__' + target)
+                used_edges.append(target + '__' + path[-1])
+                path.append(target)
+                
 
         path.reverse()
         self.epsilon -= self.gamma
