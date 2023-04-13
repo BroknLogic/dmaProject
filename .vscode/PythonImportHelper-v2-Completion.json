@@ -1,0 +1,246 @@
+[
+    {
+        "label": "dash",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "dash",
+        "description": "dash",
+        "detail": "dash",
+        "documentation": {}
+    },
+    {
+        "label": "dcc",
+        "importPath": "dash",
+        "description": "dash",
+        "isExtraImport": true,
+        "detail": "dash",
+        "documentation": {}
+    },
+    {
+        "label": "html",
+        "importPath": "dash",
+        "description": "dash",
+        "isExtraImport": true,
+        "detail": "dash",
+        "documentation": {}
+    },
+    {
+        "label": "visdcc",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "visdcc",
+        "description": "visdcc",
+        "detail": "visdcc",
+        "documentation": {}
+    },
+    {
+        "label": "dash_cytoscape",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "dash_cytoscape",
+        "description": "dash_cytoscape",
+        "detail": "dash_cytoscape",
+        "documentation": {}
+    },
+    {
+        "label": "Input",
+        "importPath": "dash.dependencies",
+        "description": "dash.dependencies",
+        "isExtraImport": true,
+        "detail": "dash.dependencies",
+        "documentation": {}
+    },
+    {
+        "label": "Output",
+        "importPath": "dash.dependencies",
+        "description": "dash.dependencies",
+        "isExtraImport": true,
+        "detail": "dash.dependencies",
+        "documentation": {}
+    },
+    {
+        "label": "State",
+        "importPath": "dash.dependencies",
+        "description": "dash.dependencies",
+        "isExtraImport": true,
+        "detail": "dash.dependencies",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "Node",
+        "description": "Node",
+        "isExtraImport": true,
+        "detail": "Node",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "Node",
+        "description": "Node",
+        "isExtraImport": true,
+        "detail": "Node",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "Node",
+        "description": "Node",
+        "isExtraImport": true,
+        "detail": "Node",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "Node",
+        "description": "Node",
+        "isExtraImport": true,
+        "detail": "Node",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "importPath": "Edge",
+        "description": "Edge",
+        "isExtraImport": true,
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "importPath": "Edge",
+        "description": "Edge",
+        "isExtraImport": true,
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "importPath": "Edge",
+        "description": "Edge",
+        "isExtraImport": true,
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "importPath": "Edge",
+        "description": "Edge",
+        "isExtraImport": true,
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "importPath": "Edge",
+        "description": "Edge",
+        "isExtraImport": true,
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "Graph",
+        "importPath": "Graph",
+        "description": "Graph",
+        "isExtraImport": true,
+        "detail": "Graph",
+        "documentation": {}
+    },
+    {
+        "label": "Graph",
+        "importPath": "Graph",
+        "description": "Graph",
+        "isExtraImport": true,
+        "detail": "Graph",
+        "documentation": {}
+    },
+    {
+        "label": "Graph",
+        "importPath": "Graph",
+        "description": "Graph",
+        "isExtraImport": true,
+        "detail": "Graph",
+        "documentation": {}
+    },
+    {
+        "label": "Edge",
+        "kind": 6,
+        "importPath": "Edge",
+        "description": "Edge",
+        "peekOfCode": "class Edge:\n    def __init__(self, source: str, target: str, mean, stdDev):\n        self.target = target\n        self.source = source\n        self.mean = mean\n        self.stdDev = stdDev\n    def getId(self) -> str:\n        return self.source + '__' + self.target\n    def getTarget(self) -> str:\n        return self.target",
+        "detail": "Edge",
+        "documentation": {}
+    },
+    {
+        "label": "Graph",
+        "kind": 6,
+        "importPath": "Graph",
+        "description": "Graph",
+        "peekOfCode": "class Graph:\n    def __init__(self, nodeCount: int, extraEdges: int):\n        self.nodes, self.dashNodes = self.makeNodes(nodeCount)\n        self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges)\n        self.random = np.random.normal\n        self.location = 0\n    def samplePath(self, path: list[str]) -> list[float]:\n        samples = []\n        for i, node_id in enumerate(path[:-1]):\n            node = self.nodes[int(node_id)] ",
+        "detail": "Graph",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "kind": 6,
+        "importPath": "Node",
+        "description": "Node",
+        "peekOfCode": "class Node:\n    def __init__(self, id: str) -> None:\n        self.id: str = id\n        self.edges: list[Edge] = []\n    def getId(self) -> str:\n        return self.id\n    def addEdge(self, edge) -> None:\n        self.edges.append(edge)\n    def getEdges(self) -> list[Edge]:\n        return self.edges",
+        "detail": "Node",
+        "documentation": {}
+    },
+    {
+        "label": "OptimalScheduler",
+        "kind": 6,
+        "importPath": "OptimalScheduler",
+        "description": "OptimalScheduler",
+        "peekOfCode": "class OptimalScheduler:\n    def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], epsilon: float = 0.5, gamma: float = 0.01, number_of_ants: int = 100):\n        self.graph = graph\n        self.qMatrix = qMatrix\n        self.useMatrix = np.zeros_like(qMatrix)\n        self.epsilon = epsilon\n        self.gamma = gamma\n        self.number_of_ants = number_of_ants\n    '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''\n    def getRealPath(self, target: str, source: str, path_dict: dict[str, list[str]]) -> list[str]:",
+        "detail": "OptimalScheduler",
+        "documentation": {}
+    },
+    {
+        "label": "OptimalScheduler",
+        "kind": 6,
+        "importPath": "antColony",
+        "description": "antColony",
+        "peekOfCode": "class OptimalScheduler:\n    def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], epsilon: float = 0.5, gamma: float = 0.01, number_of_ants: int = 100):\n        self.graph = graph\n        self.epsilon = epsilon\n        self.gamma = gamma\n        self.number_of_ants = number_of_ants\n    def calc_choice(self, curr_pos: int, pheromone_graph: list[list[float]], visited: list[int]) -> int:\n        node_idx = curr_pos\n        row_of_node = self.qMatrix[node_idx]\n        connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0 and i not in visited]",
+        "detail": "antColony",
+        "documentation": {}
+    },
+    {
+        "label": "breadth_first",
+        "kind": 2,
+        "importPath": "basic_travese",
+        "description": "basic_travese",
+        "peekOfCode": "def breadth_first(Nodes: list[Node]):\n    queue = []\n    source = Nodes[0]\n    destination = Nodes[-1]\n    visited = {}\n    visited[source.getId()] =  np.inf\n    queue.append(source)\n    while (len(queue)> 0):\n        current = queue.pop(0) \n        for edge in current.getEdges():",
+        "detail": "basic_travese",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "basic_travese",
+        "description": "basic_travese",
+        "peekOfCode": "def main():\n    nodeCount = 20\n    extraEdges = 20\n    graph = Graph(nodeCount, extraEdges)\n    nodes = graph.getNodes()\n    for node in nodes:\n        print(node.getId())\n        for edge in node.getEdges():\n            print(edge.toDict())\n    path = breadth_first(nodes)",
+        "detail": "basic_travese",
+        "documentation": {}
+    }
+]
