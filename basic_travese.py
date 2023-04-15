@@ -2,6 +2,7 @@ from Node import Node
 from Graph import Graph
 from Edge import Edge
 import numpy as np
+from OptimalScheduler import OptimalScheduler
 
 def breadth_first(Nodes: list[Node]):
     queue = []
@@ -34,21 +35,18 @@ def main():
     extraEdges = 20
     graph = Graph(nodeCount, extraEdges)
     nodes = graph.getNodes()
-    
-    for node in nodes:
-        print(node.getId())
-        for edge in node.getEdges():
-            print(edge.toDict())
-    
-    
-    path = breadth_first(nodes)
-    print(path)
-    sample = graph.samplePath(path)
-    print(sample)
+    optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
-    q = graph.getBlankQMatrix()
-    for row in q:
-        print(row)
+    for _ in range(100):
+        path_dict = optimizer.Djikstras('0')
+        real_path = optimizer.getRealPath('0', str(np.random.choice(range(1,nodeCount))), path_dict)
+
+        optimizer.updateQMatrix(real_path)
+
+    print(optimizer.qMatrix)
+
+    for edge in graph.getEdges():
+        print(f'{edge.getId()} : {edge.getMean()}')
 
     graph.visualizeNetwork()
 

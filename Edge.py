@@ -1,5 +1,3 @@
-
-
 class Edge:
     def __init__(self, source: str, target: str, mean, stdDev):
         self.target = target
