@@ -37,16 +37,17 @@ def main():
     nodes = graph.getNodes()
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
-    for _ in range(100):
+    for _ in range(1000):
+
         path_dict = optimizer.Djikstras('0')
         real_path = optimizer.getRealPath('0', str(np.random.choice(range(1,nodeCount))), path_dict)
 
         optimizer.updateQMatrix(real_path)
-
-    print(optimizer.qMatrix)
+    
+    optimizer.printQMatrix()
 
     for edge in graph.getEdges():
-        print(f'{edge.getId()} : {edge.getMean()}')
+        print(f'{edge.getId()} : {edge.randParams()}')
 
     graph.visualizeNetwork()
 

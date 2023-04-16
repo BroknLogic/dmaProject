@@ -13,25 +13,29 @@ class OptimalScheduler:
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, source: str, target: str, path_dict: dict[str, dict[str, int]]) -> list[str]:
         path = [target]
-        used_edges = []
+        used_edges = set()
         while path[-1] != source:
             # Epsilon Greedy
             if np.random.uniform(0.0,1.0) < self.epsilon:
                 # get all of the edges for the current node
-                node_edges = self.graph.getNodes()[int(path[-1])].getEdges()
+                node_edges = self.graph.getNodes()[int(path[-1])].getEdges().copy()
                 # remove an edge if it was already traversed
                 for edge in node_edges:
                     if edge.getId() in used_edges:
                         node_edges.remove(edge)
                 # pick edge and add target to path
+                if len(node_edges) == 0:
+                    continue
+                
                 edge = np.random.choice(node_edges)
                 path.append(edge.getTarget())
-                used_edges.append(edge.getId())
-                used_edges.append(edge.getTarget() + '__' + edge.getSource())
+                used_edges.add(edge.getId())
+                used_edges.add(edge.getTarget() + '__' + edge.getSource())
             else:
                 prev = str(path_dict[path[-1]]['prev'])
-                used_edges.append(path[-1] + '__' + prev)
-                used_edges.append(prev + '__' + path[-1])
+                if f'{prev}__{path[-1]}' not in used_edges:    
+                    used_edges.add(path[-1] + '__' + prev)
+                    used_edges.add(prev + '__' + path[-1])
                 path.append(prev)
                 
 
@@ -78,4 +82,15 @@ class OptimalScheduler:
             # update the q matrix
             n = self.useMatrix[int(path[i])][int(path[i+1])]
             old_val = self.qMatrix[int(path[i])][int(path[i+1])]
-            self.qMatrix[int(path[i])][int(path[i+1])] = (old_val * (n - 1) + path_sample[i]) / n 
+            self.qMatrix[int(path[i])][int(path[i+1])] = self.qMatrix[int(path[i+1])][int(path[i])] = (old_val * (n - 1) + path_sample[i]) / n 
+    
+    def printQMatrix(self) -> None:
+        print(f'{"":5s}', end=' ')
+        for i in range(len(self.qMatrix)):
+            print(f'{i:5d}', end=' ')
+        print()
+        for i, row in enumerate(self.qMatrix):
+            print(f'{i:5d}', end=' ')
+            for col in row:
+                print(f'{col:5.2f}', end=' ')
+            print()
