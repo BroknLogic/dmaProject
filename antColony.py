@@ -93,6 +93,7 @@ def start_search(graph: Graph, start_node: Node, time_limit:float, number_of_ant
             mean, std = edge_from_curr_to_next.randParams()
             time_of_edge = np.random.normal(mean, std)
             path.append(next_node.getId())
+            if next_node
 
 
 
