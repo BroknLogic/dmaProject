@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from Node import Node
 from Graph import Graph
 from Edge import Edge
@@ -27,24 +28,36 @@ def breadth_first(Nodes: list[Node]):
     
     path.reverse()
     return path
+
+def plot_profit(days: int, profits: list[float]):
+    plt.plot(range(days), profits)
+    plt.xlabel('Days')
+    plt.ylabel('Profit')
+    plt.title('Profit over time')
+    plt.show()
         
         
 
 def main():
     nodeCount = 20
     extraEdges = 20
+    number_of_days = 1000
+    num_packages = 100
     graph = Graph(nodeCount, extraEdges)
     nodes = graph.getNodes()
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
-    for _ in range(1000):
+    profit = []
+    for _ in range(number_of_days):
+        packages = []
+        for _ in range(num_packages):
+            packages.append((str(np.random.randint(1, nodeCount)), np.random.uniform() * 100))
+        
+        profit_for_day, real_paths = optimizer.simulateDay(packages, 8 * 60)
+        profit.append(profit_for_day)
 
-        path_dict = optimizer.Djikstras('0')
-        real_path = optimizer.getRealPath('0', str(np.random.choice(range(1,nodeCount))), path_dict)
-
-        optimizer.updateQMatrix(real_path)
-    
     optimizer.printQMatrix()
+    plot_profit(number_of_days, profit)
 
     for edge in graph.getEdges():
         print(f'{edge.getId()} : {edge.randParams()}')

@@ -10,6 +10,7 @@ class OptimalScheduler:
         self.epsilon = epsilon
         self.gamma = gamma
         self.source = depotNode
+        self.real_paths = []
     
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, source: str, target: str, path_dict: dict[str, dict[str, int]]) -> list[str]:
@@ -99,7 +100,7 @@ class OptimalScheduler:
             print()
     
     '''Method for simulating a shift for the a delivery driver'''
-    def simulateDay(self, packages: list[tuple[str, float]], time_limit: float):
+    def simulateDay(self, packages: list[tuple[str, float]], time_limit: float) -> tuple[float, list[list[str]]]:
         total_time = 0.0
         total_profit = 0.0
         while total_time < time_limit and len(packages) > 0:
@@ -107,30 +108,45 @@ class OptimalScheduler:
             path_dict = self.Djikstras(self.source)
             
             # Prioritize packages that are left
-
-            # Find the best package to deliver
-            best_package, profit = None
+            profit_per_length = []
+            for package in packages:
+                length = path_dict[package[0]]['dist']
+                profit = package[1]
+                profit_per_length.append(profit / length)
+            sorted_by_profit = np.argsort(profit_per_length)
             
-            total_profit += profit
-
-            time_to_deliver = self.deliverPackage(best_package, path_dict)
+            # Find the best package to deliver
+            best_package_index = -1
+            for i in range(len(sorted_by_profit) - 1, -1, -1):
+                package_index = int(sorted_by_profit[i])
+                believed_time = path_dict[packages[package_index][0]]['dist'] * 2
+                if believed_time < time_limit - total_time:
+                    best_package_index = package_index
+                    break
+            if best_package_index == -1:
+                break
+                
+            profit = packages[best_package_index][1]
+            best_package_name = packages[best_package_index][0]
+            packages.pop(best_package_index)
+                
+            
+            time_to_deliver, real_path = self.deliverPackage(best_package_name, path_dict)
+            self.real_paths.append(real_path)
 
             if total_time + time_to_deliver > time_limit:
                 break
             else:
                 total_time += time_to_deliver
-                
-            
-
-        pass
+                total_profit += profit
+        return total_profit, self.real_paths
     
     '''Method for delivering a single package'''
-    def deliverPackage(self, deliveryNode: str, path_dict: dict[str , dict[str, int]]) -> float:
+    def deliverPackage(self, deliveryNode: str, path_dict: dict[str , dict[str, int]]) -> tuple[float, list[str]]:
         real_path = self.getRealPath(self.source, deliveryNode, path_dict)
-        path_sample = self.graph.getSample(real_path)
+        path_sample = self.graph.samplePath(real_path)
         self.updateQMatrix(real_path, path_sample)
 
-        return 2 * sum(path_sample)
-
+        return 2 * sum(path_sample), real_path
 
 
