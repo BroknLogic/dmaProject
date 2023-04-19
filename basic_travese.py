@@ -44,14 +44,11 @@ def main():
     number_of_days = 1000
     num_packages = 100
     graph = Graph(nodeCount, extraEdges)
-    nodes = graph.getNodes()
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
     profit = []
     for _ in range(number_of_days):
-        packages = []
-        for _ in range(num_packages):
-            packages.append((str(np.random.randint(1, nodeCount)), np.random.uniform() * 100))
+        packages = graph.getDeliveries(100, 400)
         
         profit_for_day, real_paths = optimizer.simulateDay(packages, 8 * 60)
         profit.append(profit_for_day)

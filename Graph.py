@@ -86,12 +86,9 @@ class Graph:
         return edges 
 
 
-    def getDeliveries(self, numDelivieries: int) -> dict[str,int]:
-        deliveries = {}
-        for i in numDelivieries:
-            node = random.choice(self.nodes)
-            deliveries[node.getId] = random.uniform(10, 50)
-        return deliveries
+    def getDeliveries(self, numDelivieries: int, scaler: float) -> dict[str,int]:
+        
+        return [(str(np.random.randint(1, len(self.nodes))), np.random.uniform() * scaler) for _ in range(numDelivieries)]
 
 
     def visualizeNetwork(self) -> None:
