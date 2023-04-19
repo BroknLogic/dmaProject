@@ -46,11 +46,13 @@ def main():
     graph = Graph(nodeCount, extraEdges)
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
+    last_path = None
     profit = []
     for _ in range(number_of_days):
         packages = graph.getDeliveries(100, 400)
         
         profit_for_day, real_paths = optimizer.simulateDay(packages, 8 * 60)
+        last_path = real_paths
         profit.append(profit_for_day)
 
     optimizer.printQMatrix()
