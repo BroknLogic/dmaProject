@@ -6,7 +6,7 @@ from Node import Node
 class OptimalScheduler:
 
 
-    def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], depotNode: str = '0', epsilon: float = 0.5, gamma: float = 0.01):
+    def __init__(self, graph: Graph, qMatrix, depotNode: str = '0', epsilon: float = 0.5, gamma: float = 0.01):
         self.graph = graph
         self.qMatrix = qMatrix
         self.useMatrix = np.zeros_like(qMatrix)

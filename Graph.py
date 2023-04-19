@@ -30,7 +30,7 @@ class Graph:
                     break
         return samples
     
-    def getBlankQMatrix(self, default_val: float = 1.0) -> np.ndarray[np.ndarray[float]]:
+    def getBlankQMatrix(self, default_val: float = 1.0):
         qMatrix = np.zeros((len(self.nodes), len(self.nodes)))
         for node in self.nodes:
             for edge in node.getEdges():
