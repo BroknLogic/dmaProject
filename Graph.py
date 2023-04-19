@@ -94,7 +94,7 @@ class Graph:
         return deliveries
 
 
-    def visualizeNetwork(self) -> None:
+    def visualizeNetwork(self, locations, deliveries, paths) -> None:
         app = dash.Dash()
 
         default_stylesheet = [
@@ -114,7 +114,20 @@ class Graph:
     {
         'selector': '.location',
         'style': {
+            'background-color': 'black',
+            'line-color': 'black'
+        }
+    }, 
+    {
+        'selector': '.delivery',
+        'style': {
             'background-color': 'red',
+            'line-color': 'red'
+        }
+    },
+    {
+        'selector': '.path',
+        'style': {
             'line-color': 'red'
         }
     }
@@ -125,11 +138,18 @@ class Graph:
             cyto.Cytoscape(
                 id='net',
                 layout={'name': 'breadthfirst'},
+                # layout={
+                #     'name': 'preset',
+                #     'animate': True,
+                #     'animationDuration': 1000
+                # },
+                # autoRefreshLayout=True,
                 stylesheet=default_stylesheet,
                 style={'width': '100%', 'height': '400px'},
                 elements= self.dashNodes + [edge.toDict() for edge in self.edges]
             ),
-            html.Button('Submit', id='submit-val', n_clicks=0),
+            html.Button('Submit', id='submit-val',),
+            dcc.Store(id='value')
         ])
 
         @app.callback(Output('net', 'elements'),
@@ -137,15 +157,63 @@ class Graph:
         def update_elements(button):
             dashNodes = self.dashNodes
             self.location += 1
-            if self.location > len(dashNodes) - 1:
+            if self.location > len(locations) - 1:
                 self.location = 0
             for i in range(len(dashNodes)):
-                if i == self.location:
+                if i == locations[self.location]:
                     dashNodes[i]['classes'] += 'location'
+                elif i == deliveries[self.location]:
+                    dashNodes[i]['classes'] += 'delivery'
                 else:
                     dashNodes[i]['classes'] = ''
-            elements= self.dashNodes + [edge.toDict() for edge in self.edges]
+            dashEdges = [edge.toDict() for edge in self.edges]
+            for i in range(len(dashEdges)):
+                if dashEdges[i]['data']['label'] == paths[self.location]:
+                    dashEdges[i]['classes'] = 'path'
+                else:
+                    dashEdges[i]['classes'] = ''
+            elements= self.dashNodes + dashEdges
             return elements
 
+        # @app.callback(Output('net', 'layout'),
+        #         Input('submit-val', 'n_clicks'))
+        # def update_elements(n_clicks):
+        #     if not n_clicks:
+        #         n_clicks = 0
+
+        #     layout = {
+        #         'name': 'preset',
+        #         'animate': True,
+        #         'animationDuration': 1000,
+        #         'positions': {
+        #             node_id: {'x': 20 * lat, 'y': -20 * longitude}
+        #             for node_id, longitude, lat in (
+        #                 ("la", 34.03, -118.25 + 10 * n_clicks),
+        #                 ("nyc", 40.71, -74)
+        #             )
+        #         }
+        #     }
+
+        #     return layout
+
+        #     dashNodes = self.dashNodes
+        #     self.location += 1
+        #     if self.location > len(locations) - 1:
+        #         self.location = 0
+        #     for i in range(len(dashNodes)):
+        #         if i == locations[self.location]:
+        #             dashNodes[i]['classes'] += 'location'
+        #         elif i == deliveries[self.location]:
+        #             dashNodes[i]['classes'] += 'delivery'
+        #         else:
+        #             dashNodes[i]['classes'] = ''
+        #     dashEdges = [edge.toDict() for edge in self.edges]
+        #     for i in range(len(dashEdges)):
+        #         if dashEdges[i]['data']['label'] == paths[self.location]:
+        #             dashEdges[i]['classes'] = 'path'
+        #         else:
+        #             dashEdges[i]['classes'] = ''
+        #     elements= self.dashNodes + dashEdges
+        #     return elements
         
         app.run_server(debug=True)
