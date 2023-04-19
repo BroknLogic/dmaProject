@@ -22,10 +22,10 @@ class Graph:
     
     def samplePath(self, path: list[str]) -> list[float]:
         samples = []
-        for i, node_id in enumerate(path[:-1]):
-            node = self.nodes[int(node_id)] 
+        for i in range(len(path)-1):
+            node = self.nodes[int(path[i])] 
             for edge in node.getEdges():
-                if edge.getId() == node_id + '__' + path[i+1]:
+                if edge.getId() == node.getId() + '__' + path[i+1]:
                     samples.append(max(0, self.random(*edge.randParams())))
                     break
         return samples
@@ -44,7 +44,7 @@ class Graph:
     def getDashNodes(self, location) -> dict[str,str]:
         return self.dashNodes
     
-    def getEdges(self) -> dict[str, str]:
+    def getEdges(self) -> list[Edge]:
         return self.edges
     
     def makeNodes(self, nodeCount: int) -> tuple[list[Node], dict[str,str]]:
@@ -83,7 +83,7 @@ class Graph:
                 edges.append(edge)
                 nodes[int(source)].addEdge(edge)
                 nodes[int(target)].addEdge(edge2)
-        return edges
+        return edges 
 
 
     def getDeliveries(self, numDelivieries: int) -> dict[str,int]:
