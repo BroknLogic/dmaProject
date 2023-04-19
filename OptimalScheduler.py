@@ -1,7 +1,10 @@
 import numpy as np
 from Graph import Graph
+from Edge import Edge
+from Node import Node
 
 class OptimalScheduler:
+
 
     def __init__(self, graph: Graph, qMatrix: np.ndarray[np.ndarray[float]], depotNode: str = '0', epsilon: float = 0.5, gamma: float = 0.01):
         self.graph = graph
@@ -9,13 +12,16 @@ class OptimalScheduler:
         self.useMatrix = np.zeros_like(qMatrix)
         self.epsilon = epsilon
         self.gamma = gamma
+
         self.source = depotNode
         self.real_paths = []
+
     
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
     def getRealPath(self, source: str, target: str, path_dict: dict[str, dict[str, int]]) -> list[str]:
         path = [target]
         used_edges = set()
+
         while path[-1] != source:
             # Epsilon Greedy
             if np.random.uniform(0.0,1.0) < self.epsilon:
@@ -34,17 +40,30 @@ class OptimalScheduler:
                 used_edges.add(edge.getId())
                 used_edges.add(edge.getTarget() + '__' + edge.getSource())
             else:
+
                 # Pick optimal path
                 prev = str(path_dict[path[-1]]['prev'])
                 if f'{prev}__{path[-1]}' not in used_edges:    
                     used_edges.add(path[-1] + '__' + prev)
                     used_edges.add(prev + '__' + path[-1])
                 path.append(prev)
+
         path.reverse()
         # Reduce randomness
         self.epsilon -= self.gamma
 
         return path
+    
+    def calc_choice(self, curr_pos: int, pheromone_graph: list[list[float]], visited: list[int]) -> int:
+        node_idx = curr_pos
+        row_of_node = self.qMatrix[node_idx]
+        connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0 and i not in visited]
+        phero_vals = [pheromone_graph[node_idx][i] for i in connected_nodes]
+        sum_vals = sum(phero_vals)
+        prob_values = [i/sum_vals for i in phero_vals]
+        cutoffs = [sum(prob_values[:i+1]) for i in range(len(prob_values))]
+        random_value = np.random.uniform(0.0,1.0)
+
 
     '''Djikstra's algorithm for finding shortest path from source to all other nodes'''
     def Djikstras(self, source: str):
@@ -74,6 +93,7 @@ class OptimalScheduler:
                 min = dist[i]
                 min_index = i
         return min_index    
+
     
     '''Method for updating the Q matrix given a path'''
     def updateQMatrix(self, path: list[str], path_sample: list[float]) -> None:

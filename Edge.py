@@ -21,13 +21,13 @@ class Edge:
         return (self.mean, self.stdDev)
     
     def toDict(self) -> dict[str, str]:
-        return {
-            'id': self.getId(),
-            'from': self.source,
-            'to': self.target,
+        return {'data':{
+            'label': self.getId(),
+            'source': self.source,
+            'target': self.target,
             'width': self.mean,
             'mean': str(self.mean),
-            'stdDev': str(self.stdDev),
+            'stdDev': str(self.stdDev),}
             }
         
     def __str__(self) -> str:
