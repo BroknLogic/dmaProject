@@ -1,7 +1,9 @@
+import matplotlib.pyplot as plt
 from Node import Node
 from Graph import Graph
 from Edge import Edge
 import numpy as np
+from OptimalScheduler import OptimalScheduler
 
 def breadth_first(Nodes: list[Node]):
     queue = []
@@ -26,29 +28,38 @@ def breadth_first(Nodes: list[Node]):
     
     path.reverse()
     return path
+
+def plot_profit(days: int, profits: list[float]):
+    plt.plot(range(days), profits)
+    plt.xlabel('Days')
+    plt.ylabel('Profit')
+    plt.title('Profit over time')
+    plt.show()
         
         
 
 def main():
     nodeCount = 20
     extraEdges = 20
+    number_of_days = 1000
+    num_packages = 100
     graph = Graph(nodeCount, extraEdges)
-    nodes = graph.getNodes()
-    
-    for node in nodes:
-        print(node.getId())
-        for edge in node.getEdges():
-            print(edge.toDict())
-    
-    
-    path = breadth_first(nodes)
-    print(path)
-    sample = graph.samplePath(path)
-    print(sample)
+    optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
-    q = graph.getBlankQMatrix()
-    for row in q:
-        print(row)
+    last_path = None
+    profit = []
+    for _ in range(number_of_days):
+        packages = graph.getDeliveries(100, 400)
+        
+        profit_for_day, real_paths = optimizer.simulateDay(packages, 8 * 60)
+        last_path = real_paths
+        profit.append(profit_for_day)
+
+    optimizer.printQMatrix()
+    plot_profit(number_of_days, profit)
+
+    for edge in graph.getEdges():
+        print(f'{edge.getId()} : {edge.randParams()}')
 
     graph.visualizeNetwork()
 
