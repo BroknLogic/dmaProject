@@ -8,16 +8,19 @@ import random
 from Node import Node
 from Edge import Edge
 import numpy as np
+import time
 
 
 
 class Graph:
     
     def __init__(self, nodeCount: int, extraEdges: int):
+        self.len_range = (5, 20)
         self.nodes, self.dashNodes = self.makeNodes(nodeCount)
-        self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges)
+        self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges, len_range=self.len_range)
         self.random = np.random.normal
         self.location = 0
+        self.animate = False;
     
     
     def samplePath(self, path: list[str]) -> list[float]:
@@ -91,7 +94,7 @@ class Graph:
         return [(str(np.random.randint(1, len(self.nodes))), np.random.uniform() * scaler) for _ in range(numDelivieries)]
 
 
-    def visualizeNetwork(self, locations, deliveries, paths) -> None:
+    def visualizeNetwork(self, deliveries, paths, qMap) -> None:
         app = dash.Dash()
 
         default_stylesheet = [
@@ -129,7 +132,7 @@ class Graph:
         }
     }
 ]
-
+        
         # define layout
         app.layout = html.Div([
             cyto.Cytoscape(
@@ -145,33 +148,47 @@ class Graph:
                 style={'width': '100%', 'height': '400px'},
                 elements= self.dashNodes + [edge.toDict() for edge in self.edges]
             ),
-            html.Button('Submit', id='submit-val',),
-            dcc.Store(id='value')
+            html.Button('Start/Stop Animation', id='submit-val',),
+            dcc.Interval(id='interval', interval=0.5*1000, n_intervals=0)
         ])
 
         @app.callback(Output('net', 'elements'),
-              Input('submit-val', 'n_clicks'))
-        def update_elements(button):
+                      Input('interval', 'n_intervals'))
+        def update_elements(data):
             dashNodes = self.dashNodes
             self.location += 1
-            if self.location > len(locations) - 1:
+            if self.location > len(deliveries) - 1:
                 self.location = 0
             for i in range(len(dashNodes)):
-                if i == locations[self.location]:
-                    dashNodes[i]['classes'] += 'location'
-                elif i == deliveries[self.location]:
-                    dashNodes[i]['classes'] += 'delivery'
+                if i == int(deliveries[self.location]):
+                    if dashNodes[i]['classes'] == '':
+                        dashNodes[i]['classes'] += 'delivery'
                 else:
                     dashNodes[i]['classes'] = ''
+            dashNodes[0]['classes'] = 'location'
             dashEdges = [edge.toDict() for edge in self.edges]
             for i in range(len(dashEdges)):
-                if dashEdges[i]['data']['label'] == paths[self.location]:
+                width = qMap[i][int(dashEdges[i]['data']["source"])][int(dashEdges[i]['data']['target'])]
+                dashEdges[i]['style'] = {"width": int(self.len_range[1] * 1.5 - width)}
+                if dashEdges[i]['data']['label'] in paths[self.location]:
                     dashEdges[i]['classes'] = 'path'
                 else:
                     dashEdges[i]['classes'] = ''
+                    
             elements= self.dashNodes + dashEdges
             return elements
 
+        @app.callback(Output('interval', 'disabled'),
+                      Input('submit-val', 'n_clicks'))
+        def testing(button):
+            self.animate = not self.animate
+            return self.animate
+        # def testing(button):
+        #     for i in range(2):
+        #         update_elements(button)
+        #         time.sleep(.5)
+        #     return 4
+            
         # @app.callback(Output('net', 'layout'),
         #         Input('submit-val', 'n_clicks'))
         # def update_elements(n_clicks):

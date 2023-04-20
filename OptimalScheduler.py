@@ -15,6 +15,7 @@ class OptimalScheduler:
 
         self.source = depotNode
         self.real_paths = []
+        self.q_graphs = [self.qMatrix.copy()]
 
     
     '''Method of getting a path between source and target with user defined randomness given SSSP dictionary'''
@@ -104,7 +105,6 @@ class OptimalScheduler:
             n = self.useMatrix[int(path[i])][int(path[i+1])]
             old_val = self.qMatrix[int(path[i])][int(path[i+1])]
             self.qMatrix[int(path[i])][int(path[i+1])] = self.qMatrix[int(path[i+1])][int(path[i])] = (old_val * (n - 1) + path_sample[i]) / n 
-        
         return 2 * sum(path_sample)
 
     '''Method for printing the Q matrix'''
@@ -152,6 +152,7 @@ class OptimalScheduler:
                 
             
             time_to_deliver, real_path = self.deliverPackage(best_package_name, path_dict)
+            self.q_graphs.append(self.qMatrix.copy())
             self.real_paths.append(real_path)
 
             if total_time + time_to_deliver > time_limit:
@@ -159,7 +160,7 @@ class OptimalScheduler:
             else:
                 total_time += time_to_deliver
                 total_profit += profit
-        return total_profit, self.real_paths
+        return total_profit
     
     '''Method for delivering a single package'''
     def deliverPackage(self, deliveryNode: str, path_dict: dict[str , dict[str, int]]) -> tuple[float, list[str]]:

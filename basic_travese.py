@@ -34,7 +34,7 @@ def plot_profit(days: int, profits: list[float]):
     plt.xlabel('Days')
     plt.ylabel('Profit')
     plt.title('Profit over time')
-    plt.show()
+    #plt.show()
         
         
 
@@ -46,22 +46,31 @@ def main():
     graph = Graph(nodeCount, extraEdges)
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
 
-    last_path = None
     profit = []
     for _ in range(number_of_days):
         packages = graph.getDeliveries(100, 400)
         
-        profit_for_day, real_paths = optimizer.simulateDay(packages, 8 * 60)
-        last_path = real_paths
+        profit_for_day = optimizer.simulateDay(packages, 8 * 60)
         profit.append(profit_for_day)
 
-    optimizer.printQMatrix()
     plot_profit(number_of_days, profit)
+
+    real_paths = optimizer.real_paths
+    q_graphs = optimizer.q_graphs
 
     for edge in graph.getEdges():
         print(f'{edge.getId()} : {edge.randParams()}')
 
-    graph.visualizeNetwork()
+    deliveries, paths = [], []
+    for path in real_paths:
+        deliveries.append(path[-1])
+        stuff = [f"{path[i]}__{path[i+1]}" for i in range(len(path) -1)]
+        stuff += [f"{path[i+1]}__{path[i]}" for i in range(len(path) -1)]
+        paths.append(stuff)
+
+
+
+    graph.visualizeNetwork(deliveries, paths, q_graphs)
 
     
 # define main calling

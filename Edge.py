@@ -27,7 +27,7 @@ class Edge:
             'target': self.target,
             'width': self.mean,
             'mean': str(self.mean),
-            'stdDev': str(self.stdDev),}
+            'stdDev': str(self.stdDev),},
             }
         
     def __str__(self) -> str:
