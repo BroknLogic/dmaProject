@@ -40,11 +40,11 @@ def plot_profit(days: int, profits: list[float]):
 
 def main():
     nodeCount = 20
-    extraEdges = 20
+    extraEdges = 0
     number_of_days = 1000
     num_packages = 100
     graph = Graph(nodeCount, extraEdges)
-    optimizer = OptimalScheduler(graph, graph.getBlankQMatrix())
+    optimizer = OptimalScheduler(graph, graph.getBlankQMatrix(), epsilon=0.7)
 
     profit = []
     for _ in range(number_of_days):
@@ -68,7 +68,7 @@ def main():
         stuff += [f"{path[i+1]}__{path[i]}" for i in range(len(path) -1)]
         paths.append(stuff)
 
-
+    optimizer.printQMatrix()
 
     graph.visualizeNetwork(deliveries, paths, q_graphs)
 

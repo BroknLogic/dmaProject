@@ -141,7 +141,7 @@ class Graph:
                 elements= self.dashNodes + [edge.toDict() for edge in self.edges]
             ),
             html.Button('Start/Stop Animation', id='submit-val',),
-            dcc.Interval(id='interval', interval=0.5*1000, n_intervals=0)
+            dcc.Interval(id='interval', interval=0.2*1000, n_intervals=0)
         ])
 
         @app.callback(Output('net', 'elements'),
@@ -161,7 +161,7 @@ class Graph:
             dashEdges = [edge.toDict() for edge in self.edges]
             for i in range(len(dashEdges)):
                 width = qMap[i][int(dashEdges[i]['data']["source"])][int(dashEdges[i]['data']['target'])]
-                dashEdges[i]['style'] = {"width": int(self.len_range[1] * 1.5 - width)}
+                dashEdges[i]['style'] = {"width": int(self.len_range[1] * 1.2 - width)}
                 if dashEdges[i]['data']['label'] in paths[self.location]:
                     dashEdges[i]['classes'] = 'path'
                 else:
