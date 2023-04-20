@@ -1,5 +1,4 @@
 import dash
-import visdcc
 import dash_cytoscape as cyto
 from dash import dcc
 from dash import html
@@ -8,7 +7,6 @@ import random
 from Node import Node
 from Edge import Edge
 import numpy as np
-import time
 
 
 
@@ -20,7 +18,7 @@ class Graph:
         self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges, len_range=self.len_range)
         self.random = np.random.normal
         self.location = 0
-        self.animate = False;
+        self.animate = False
     
     
     def samplePath(self, path: list[str]) -> list[float]:
@@ -138,12 +136,6 @@ class Graph:
             cyto.Cytoscape(
                 id='net',
                 layout={'name': 'breadthfirst'},
-                # layout={
-                #     'name': 'preset',
-                #     'animate': True,
-                #     'animationDuration': 1000
-                # },
-                # autoRefreshLayout=True,
                 stylesheet=default_stylesheet,
                 style={'width': '100%', 'height': '400px'},
                 elements= self.dashNodes + [edge.toDict() for edge in self.edges]
@@ -183,51 +175,5 @@ class Graph:
         def testing(button):
             self.animate = not self.animate
             return self.animate
-        # def testing(button):
-        #     for i in range(2):
-        #         update_elements(button)
-        #         time.sleep(.5)
-        #     return 4
-            
-        # @app.callback(Output('net', 'layout'),
-        #         Input('submit-val', 'n_clicks'))
-        # def update_elements(n_clicks):
-        #     if not n_clicks:
-        #         n_clicks = 0
-
-        #     layout = {
-        #         'name': 'preset',
-        #         'animate': True,
-        #         'animationDuration': 1000,
-        #         'positions': {
-        #             node_id: {'x': 20 * lat, 'y': -20 * longitude}
-        #             for node_id, longitude, lat in (
-        #                 ("la", 34.03, -118.25 + 10 * n_clicks),
-        #                 ("nyc", 40.71, -74)
-        #             )
-        #         }
-        #     }
-
-        #     return layout
-
-        #     dashNodes = self.dashNodes
-        #     self.location += 1
-        #     if self.location > len(locations) - 1:
-        #         self.location = 0
-        #     for i in range(len(dashNodes)):
-        #         if i == locations[self.location]:
-        #             dashNodes[i]['classes'] += 'location'
-        #         elif i == deliveries[self.location]:
-        #             dashNodes[i]['classes'] += 'delivery'
-        #         else:
-        #             dashNodes[i]['classes'] = ''
-        #     dashEdges = [edge.toDict() for edge in self.edges]
-        #     for i in range(len(dashEdges)):
-        #         if dashEdges[i]['data']['label'] == paths[self.location]:
-        #             dashEdges[i]['classes'] = 'path'
-        #         else:
-        #             dashEdges[i]['classes'] = ''
-        #     elements= self.dashNodes + dashEdges
-        #     return elements
         
         app.run_server(debug=True)
