@@ -64,7 +64,22 @@ class AntColony:
         
     #     return path
 
- def calc_choice(curr_node: Node, pheromone_graph: list[list[float]]) -> int:
+def getRealPath(source: str, target: str, path_dict: dict[str, dict[str, int]]) -> list[str]:
+    path = [target]
+    used_edges = set()
+    while path[-1] != source:
+        prev = str(path_dict[path[-1]]['prev'])
+        if f'{prev}__{path[-1]}' not in used_edges:    
+            used_edges.add(path[-1] + '__' + prev)
+            used_edges.add(prev + '__' + path[-1])
+        path.append(prev)
+    path.reverse()
+    # Reduce randomness
+    return path
+
+
+
+def calc_choice(curr_node: Node, pheromone_graph: list[list[float]]) -> int:
     node_idx = curr_pos
     row_of_node = self.qMatrix[node_idx]
     connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0]
@@ -79,41 +94,71 @@ class AntColony:
             return connected_nodes[i]
     raise Exception("No node was chosen")
 
-def start_search(graph: Graph, start_node: Node, time_limit:float, number_of_ants: int):
-    pheromone_graph = graph.getBlankQMatrix(1.0)
+def decay_pheromone(pheromone_graph: list[list[float]]) -> None:
+    for i in range(len(pheromone_graph)):
+        for j in range(len(pheromone_graph[i])):
+            pheromone_graph[i][j] *= 0.9
 
+def ant_search(graph: Graph, start_node: Node, time_limit:float, number_of_ants: int, packages: dict[str, int]):
+    pheromone_graph = graph.getBlankQMatrix(1.0)
     curr_node = start_node
     for i in range(number_of_ants):
         time = 0.0
         path = [curr_node.getId()]
+        length_of_trail = 0.0
+        profit = 0.0
         while time < time_limit:
             next_node_id = calc_choice(start_node, pheromone_graph)
-            next_node= graph.getNode(next_node_id)
+            next_node = graph.getNode(next_node_id)
+            current_profit = packages[next_node.getId()]
             edge_from_curr_to_next = curr_node.getEdge(curr_node.getId(), next_node.getId())
             mean, std = edge_from_curr_to_next.randParams()
             time_of_edge = np.random.normal(mean, std)
-            path.append(next_node.getId())
-            if next_node
+            decay_pheromone(pheromone_graph)
+            if length_of_trail + time_of_edge < time_limit:
+                path.append(next_node.getId())
+                length_of_trail += time_of_edge
+                profit += current_profit
+            else:
+                break
+        propogate_pheromones(path, pheromone_graph, length_of_trail, profit)
+
+def best_path(self, source: int, target: int, pheremone_graph: list[list[float]], packages: dict[str, int]) -> list[int]:
+    path = [source]
+    profit = 0.0
+    while path[-1] != target:
+        next_node = np.argmax(pheremone_graph[int(path[-1])])
+        
+        path.append(next_node)
+    
+    return path   
+
+def propogate_pheromones(path: list[int], pheromone_graph: list[list[float]], length_of_trail: float, profit: float):
+    for i in range(len(path) - 1):
+        pheromone_graph[path[i]][path[i+1]] += profit/length_of_trail
+        pheromone_graph[path[i+1]][path[i]] += profit/length_of_trail
+                
 
 
+
+def main():
+    nodeCount = 20
+    extraEdges = 0
+    number_of_days = 1000
+    num_packages = 100
+    graph = Graph(nodeCount, extraEdges)
+    optimizer = OptimalScheduler(graph, graph.getBlankQMatrix(), epsilon=0.7)
+
+    profit = []
+    for _ in range(number_of_days):
+        packages = graph.getDeliveries(100, 400)
+        
+        profit_for_day = optimizer.simulateDay(packages, 8 * 60)
+        profit.append(profit_for_day)
+
+    plot_profit(number_of_days, profit)
 
     
 
 if __name__ == "__main__":
-    nodeCount = 20
-    extraEdges = 20
-    graph = Graph(nodeCount, extraEdges)
-    nodes = graph.getNodes()
-    
-    for node in nodes:
-        print(node.getId())
-        for edge in node.getEdges():
-            print(edge.toDict())
-    
-    OptimalScheduler_ = OptimalScheduler(graph, graph.getBlankQMatrix(1.0))
-    targets = [i for i in range(1, nodeCount)]
-    path_dict = OptimalScheduler_.getSSSP(0, targets)
-    print(path_dict)
-    
-
-    graph.visualizeNetwork()
+    main()
