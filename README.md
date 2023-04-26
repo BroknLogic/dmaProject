@@ -1,7 +1,9 @@
 # Route Optimization with Continuous Data Collection of an Uncertain Road System:
 
 The purpose of this project is to create package delivery algorithms that can schedule deliveries while updating information about the road system. The delivery of single large and multiple small packages to retail or average consumers involves significant planning to schedule deliveries and maximize profit. However, this is not an easy task for a delivery company that is new to an area and has no knowledge of the road system. First, the team creates a road map of an area assigning random traversal times between each point and guaranteeing the road system is connected. 
+
 For large single trip packages, the team first creates a updating semi-greedy scheduler (USGS) that prioritizes pay rate for a delivery based on its information. Second, the team develops a way of creating sufficiently random paths to each delivery that allows the scheduler to update its information about the road system. Next, the team creates a Monte Carlo scheduler that utilizes particle swarm optimization to pick the best delivery schedule with no data collection. Finally, the researchers compare the methods to determine the performance of the USGS algorithm.
+
 For multiple small packages, the team solves this problem by implementing the ant colony optimization algorithm to determine a route to deliver all of the packages. The team accomplishes this by having an initial discovery phase of the road map where agents travel to prospective delivery locations. After this phase, a single carrier constructs the optimal delivery route for all of the packages.
 
 
