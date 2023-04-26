@@ -1,5 +1,4 @@
 import dash
-import visdcc
 import dash_cytoscape as cyto
 from dash import dcc
 from dash import html
@@ -14,25 +13,25 @@ import numpy as np
 class Graph:
     
     def __init__(self, nodeCount: int, extraEdges: int):
+        self.len_range = (5, 20)
         self.nodes, self.dashNodes = self.makeNodes(nodeCount)
-        self.id_to_node = {int(node.getId()): node for node in self.nodes}
-        self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges)
-        self.source_target_to_edge: dict[str, Edge]= {edge.getSource() + edge.getTarget(): edge for edge in self.edges}
+        self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges, len_range=self.len_range)
         self.random = np.random.normal
         self.location = 0
+        self.animate = False
     
     
     def samplePath(self, path: list[str]) -> list[float]:
         samples = []
-        for i, node_id in enumerate(path[:-1]):
-            node = self.nodes[int(node_id)] 
+        for i in range(len(path)-1):
+            node = self.nodes[int(path[i])] 
             for edge in node.getEdges():
-                if edge.getId() == node_id + '__' + path[i+1]:
+                if edge.getId() == node.getId() + '__' + path[i+1]:
                     samples.append(max(0, self.random(*edge.randParams())))
                     break
         return samples
     
-    def getBlankQMatrix(self, default_val: float = 1.0) -> np.ndarray[np.ndarray[float]]:
+    def getBlankQMatrix(self, default_val: float = 1.0):
         qMatrix = np.zeros((len(self.nodes), len(self.nodes)))
         for node in self.nodes:
             for edge in node.getEdges():
@@ -43,17 +42,11 @@ class Graph:
     def getNodes(self) -> list[Node]:
         return self.nodes
     
-    def getNode(self, id_: int) -> Node:
-        return self.id_to_node[id_]
-
     def getDashNodes(self, location) -> dict[str,str]:
         return self.dashNodes
     
-    def getEdges(self) -> dict[str, str]:
+    def getEdges(self) -> list[Edge]:
         return self.edges
-    
-    def getEdge(self, source: str, target: str) -> Edge:
-        return self.source_target_to_edge[source + target]
     
     def makeNodes(self, nodeCount: int) -> tuple[list[Node], dict[str,str]]:
         nodes = [Node(str(i)) for i in range(nodeCount)]
@@ -91,18 +84,15 @@ class Graph:
                 edges.append(edge)
                 nodes[int(source)].addEdge(edge)
                 nodes[int(target)].addEdge(edge2)
-        return edges
+        return edges 
 
 
-    def getDeliveries(self, numDelivieries: int) -> dict[str,int]:
-        deliveries = {}
-        for i in numDelivieries:
-            node = random.choice(self.nodes)
-            deliveries[node.getId] = random.uniform(10, 50)
-        return deliveries
+    def getDeliveries(self, numDelivieries: int, scaler: float) -> dict[str,int]:
+        
+        return [(str(np.random.randint(1, len(self.nodes))), np.random.uniform() * scaler) for _ in range(numDelivieries)]
 
 
-    def visualizeNetwork(self) -> None:
+    def visualizeNetwork(self, deliveries, paths, qMap) -> None:
         app = dash.Dash()
 
         default_stylesheet = [
@@ -122,12 +112,25 @@ class Graph:
     {
         'selector': '.location',
         'style': {
+            'background-color': 'black',
+            'line-color': 'black'
+        }
+    }, 
+    {
+        'selector': '.delivery',
+        'style': {
             'background-color': 'red',
+            'line-color': 'red'
+        }
+    },
+    {
+        'selector': '.path',
+        'style': {
             'line-color': 'red'
         }
     }
 ]
-
+        
         # define layout
         app.layout = html.Div([
             cyto.Cytoscape(
@@ -137,23 +140,40 @@ class Graph:
                 style={'width': '100%', 'height': '400px'},
                 elements= self.dashNodes + [edge.toDict() for edge in self.edges]
             ),
-            html.Button('Submit', id='submit-val', n_clicks=0),
+            html.Button('Start/Stop Animation', id='submit-val',),
+            dcc.Interval(id='interval', interval=0.2*1000, n_intervals=0)
         ])
 
         @app.callback(Output('net', 'elements'),
-              Input('submit-val', 'n_clicks'))
-        def update_elements(button):
+                      Input('interval', 'n_intervals'))
+        def update_elements(data):
             dashNodes = self.dashNodes
             self.location += 1
-            if self.location > len(dashNodes) - 1:
+            if self.location > len(deliveries) - 1:
                 self.location = 0
             for i in range(len(dashNodes)):
-                if i == self.location:
-                    dashNodes[i]['classes'] += 'location'
+                if i == int(deliveries[self.location]):
+                    if dashNodes[i]['classes'] == '':
+                        dashNodes[i]['classes'] += 'delivery'
                 else:
                     dashNodes[i]['classes'] = ''
-            elements= self.dashNodes + [edge.toDict() for edge in self.edges]
+            dashNodes[0]['classes'] = 'location'
+            dashEdges = [edge.toDict() for edge in self.edges]
+            for i in range(len(dashEdges)):
+                width = qMap[i][int(dashEdges[i]['data']["source"])][int(dashEdges[i]['data']['target'])]
+                dashEdges[i]['style'] = {"width": int(self.len_range[1] * 1.2 - width)}
+                if dashEdges[i]['data']['label'] in paths[self.location]:
+                    dashEdges[i]['classes'] = 'path'
+                else:
+                    dashEdges[i]['classes'] = ''
+                    
+            elements= self.dashNodes + dashEdges
             return elements
 
+        @app.callback(Output('interval', 'disabled'),
+                      Input('submit-val', 'n_clicks'))
+        def testing(button):
+            self.animate = not self.animate
+            return self.animate
         
         app.run_server(debug=True)
