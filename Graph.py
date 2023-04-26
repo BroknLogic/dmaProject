@@ -15,7 +15,9 @@ class Graph:
     def __init__(self, nodeCount: int, extraEdges: int):
         self.len_range = (5, 20)
         self.nodes, self.dashNodes = self.makeNodes(nodeCount)
+        self.id_to_node = {int(node.getId()): node for node in self.nodes}
         self.edges: list[Edge] = self.makeEdges(self.nodes, extraEdges, len_range=self.len_range)
+        self.source_target_to_edge: dict[str, Edge]= {edge.getSource() + edge.getTarget(): edge for edge in self.edges}
         self.random = np.random.normal
         self.location = 0
         self.animate = False
@@ -41,6 +43,12 @@ class Graph:
             
     def getNodes(self) -> list[Node]:
         return self.nodes
+    
+    def getNode(self, id_: int) -> Node:
+        return self.id_to_node[id_]
+
+    def getEdge(self, source: str, target: str) -> Edge:
+        return self.source_target_to_edge[source + target]
     
     def getDashNodes(self, location) -> dict[str,str]:
         return self.dashNodes

@@ -21,7 +21,7 @@ def getRealPath(source: str, target: str, path_dict: dict[str, dict[str, int]]) 
 
 def calc_choice(curr_node: Node, pheromone_graph: np.ndarray[typing.Any]) -> int:
     node_idx = int(curr_node.getId())
-    row_of_node = self.qMatrix[node_idx]
+    row_of_node = pheromone_graph[node_idx]
     connected_nodes = [i for i in range(len(row_of_node)) if row_of_node[i] != 0]
     phero_vals = [pheromone_graph[node_idx][i] for i in connected_nodes]
     sum_vals = sum(phero_vals)
@@ -76,10 +76,13 @@ def best_path(source: int, pheremone_graph: list[list[float]], packages: dict[st
     while time < time_limit:
         next_node = np.argmax(pheremone_graph[int(path[-1])])
         current_profit = [(i , package[1]) for i, package in enumerate(packages) if package[0] == int(next_node_id)]
-        index_of_best_package = max(current_profit, key=lambda x: x[1])[0]
-        profit = packages[index_of_best_package][1]
-        packages.pop(index_of_best_package)
-        time_of_edge = sum(graph.samplePath([curr_node.getId(), next_node.getId()]))
+        if len(current_profit) == 0:
+            profit = 0
+        else:
+            index_of_best_package = max(current_profit, key=lambda x: x[1])[0]
+            profit = packages[index_of_best_package][1]
+            packages.pop(index_of_best_package)
+        time_of_edge = sum(graph.samplePath([path[-1].getId(), next_node.getId()]))
         decay_pheromone(pheromone_graph)
         if length_of_trail + time_of_edge < time_limit:
             path.append(next_node.getId())
