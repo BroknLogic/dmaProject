@@ -1,6 +1,9 @@
 # Route Optimization with Continuous Data Collection of an Uncertain Road System:
 
-The purpose of this project is to create a package delivery algorithm that can continuously prioritize tasks, schedule tasks, and collect data about a graph with uncertain edge weights. The delivery of large single trip packages to retail or average consumers involves significant planning to schedule deliveries and maximize profit. However, this is not an easy task for a delivery company that is new to an area and has no knowledge of the road system. The team solves this problem by first creating a road map of an area assigning random traversal times between each point and guaranteeing the road system is connected. Second, the team creates a route finding algorithm that balances discovery with exploitation of available data to learn and choose more optimal delivery routes. Third, the team builds a scheduler that continuously updates the delivery plan based on priority to maximize profit. Finally, the team compares the results of their algorithm to a monte carlo route planner to determine the algorithm’s effectiveness.
+The purpose of this project is to create package delivery algorithms that can schedule deliveries while updating information about the road system. The delivery of single large and multiple small packages to retail or average consumers involves significant planning to schedule deliveries and maximize profit. However, this is not an easy task for a delivery company that is new to an area and has no knowledge of the road system. First, the team creates a road map of an area assigning random traversal times between each point and guaranteeing the road system is connected. 
+For large single trip packages, the team first creates a updating semi-greedy scheduler (USGS) that prioritizes pay rate for a delivery based on its information. Second, the team develops a way of creating sufficiently random paths to each delivery that allows the scheduler to update its information about the road system. Next, the team creates a Monte Carlo scheduler that utilizes particle swarm optimization to pick the best delivery schedule with no data collection. Finally, the researchers compare the methods to determine the performance of the USGS algorithm.
+For multiple small packages, the team solves this problem by implementing the ant colony optimization algorithm to determine a route to deliver all of the packages. The team accomplishes this by having an initial discovery phase of the road map where agents travel to prospective delivery locations. After this phase, a single carrier constructs the optimal delivery route for all of the packages.
+
 
 ## Uncertainty Algorthims Implemented: 
 
@@ -25,9 +28,22 @@ We were unable to fully implement the Ant Colony algorithm with our node edge in
 2. Scheduling 
    - Our Ant Colony algorithm utilizes a predictive priority algorithm to create a delivery route which optimizes the profit given a list of packages. This is done making the amount of pheremone left each edge a function of the profit for delivering to that node and the time to traverse the edge. This effectively creates the delivery route based on the best profit.
 
-## Running the Monte Carlo Simulation and Updating Semi-Greedy Scheduler (USGS):
+# Monte Carlo Simulation and Updating Semi-Greedy Scheduler (USGS):
 
-The
+## Running Code
+
+To run this code all that needs to be done is run the main.py file
+
+## Outputs
+
+The outputs for this code is listed below:
+
+- Graph showing the profit over time of the USGS and Monte Carlo scheduler for large package delivery
+- Interactive GUI that shows how the USGS algorithm updates its belief space over time.
+
+## Results
+
+The following 
 
 ## Running the Ant Colony Simulation:
 
