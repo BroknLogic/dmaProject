@@ -5,30 +5,27 @@ The purpose of this project is to create a package delivery algorithm that can c
 ## Uncertainty Algorthims Implemented: 
 
 1. Pure Randomness
-   - Our Monte Carlo utilizes particle swarm optimization to run a 100 simulations to predict the best route to the delivery, after the simulations are ran the best path is utilized as the actual delivery route
+   - Our Monte Carlo utilizes particle swarm optimization and pure randomness to run a 100 simulations to predict the best route to the delivery, after the simulations are ran the best path is utilized as the actual delivery route
   
 2. Explore and Exploit 
-   - Our U.S.G.S. utilizes an Epsilon Greedy algorithm to allow the delievery to have a random chance of taking a suboptimal path to furhter explore the enviroment
+   - Our USGS utilizes an Epsilon Greedy algorithm to allow the delievery to have a random chance of taking a suboptimal path to further explore the enviroment
   
 3. Sorting and Ordering 
-   - Our U.S.G.S. utilizes a prioritization algorithm 
+   - Our USGS utilizes a prioritization algorithm prioritizes the payrate for package delivery and will select the packages with the highest payrate
   
 4. Scheduling 
-   - Our U.S.G.S. utilizes a predictive priority algorithm
+   - Our USGS utilizes a predictive priority algorithm to schedule the package delivery sequence by comparing price over distance
 
 ## Uncertainty Algorthims attempted: 
-We were unable to fully implement the Ant Colony algorithm with our visual interface given the time constraint, however we did get these algorithms working but are unable to visualize them: 
+We were unable to fully implement the Ant Colony algorithm with our node edge interface given the time constraint, however we did get these algorithms working but are unable to visualize them: 
 
 1. Bayes Rule
-   - Our Ant Colony utilizes a modified Baysian update to select which pheremone values to follow
+   - Our Ant Colony utilizes a modified Baysian rule to update the pheremone values and asssign a probability of each path at a given node
 
 2. Scheduling 
-   - Our Ant Colony algorithm utilizes a predictive priority algorithm
+   - Our Ant Colony algorithm utilizes a predictive priority algorithm to schedule the paxckage delivery sequence by comparing price over distance
 
-## Running the Monte Carlo Simulation:
-
-
-## Running the Updating Semi-Greedy Scheduler Simulation:
+## Running the Monte Carlo Simulation and Updating Semi-Greedy Scheduler (USGS):
 
 
 ## Running the Ant Colony Simulation:
@@ -42,4 +39,4 @@ We were unable to fully implement the Ant Colony algorithm with our visual inter
 ### Updating Semi-Greedy Scheduler:
 !(./Figures/USGS.gif)
 
-### Ant Colony Simulation:
+### Ant Colony Algorithm:
