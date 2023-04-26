@@ -34,9 +34,9 @@ We were unable to fully implement the Ant Colony algorithm with our node edge in
 ## Results:
 
 ### Monte Carlo Simulation:
-!(./Figures/GreedyVsMonteCarlo.png)
+![](./Figures/GreedyVsMonteCarlo.png)
 
 ### Updating Semi-Greedy Scheduler:
-!(./Figures/USGS.gif)
+![](./Figures/USGS.gif)
 
 ### Ant Colony Algorithm:
