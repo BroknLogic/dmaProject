@@ -6,30 +6,6 @@ import numpy as np
 from OptimalScheduler import OptimalScheduler
 from MonteCarlo import MonteCarlo
 
-def breadth_first(Nodes: list[Node]):
-    queue = []
-    source = Nodes[0]
-    destination = Nodes[-1]
-    visited = {}
-    visited[source.getId()] =  np.inf
-    queue.append(source)
-    
-    while (len(queue)> 0):
-        current = queue.pop(0) 
-        for edge in current.getEdges():
-            to_node = edge.getTarget()
-            if to_node not in visited:
-                queue.append(Nodes[int(to_node)])
-                visited[to_node] = current.getId()
-    
-    path = [destination.getId()]
-    
-    while path[-1] != source.getId():
-        path.append(visited[path[-1]])
-    
-    path.reverse()
-    return path
-
 def plot_profit(days: int, greedy_profits: list[float] = None, monteCarlo_profits: list[float]=None):
     plt.xlabel('Days')
     plt.ylabel('Profit')
