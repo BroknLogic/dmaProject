@@ -12,7 +12,7 @@ def plot_profit(days: int, greedy_profits: list[float] = None, monteCarlo_profit
     plt.title('Profit over time')
     plt.plot(range(days), greedy_profits)
     plt.plot(range(days), monteCarlo_profits)
-    plt.legend(['Greedy', 'Monte Carlo'])
+    plt.legend(['USGS', 'Monte Carlo'])
     plt.savefig('Figures/GreedyvsMonteCarlo.png')
     plt.show()
         
