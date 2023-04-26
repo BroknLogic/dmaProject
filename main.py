@@ -4,6 +4,7 @@ from Graph import Graph
 from Edge import Edge
 import numpy as np
 from OptimalScheduler import OptimalScheduler
+from MonteCarlo import MonteCarlo
 
 def breadth_first(Nodes: list[Node]):
     queue = []
@@ -29,12 +30,15 @@ def breadth_first(Nodes: list[Node]):
     path.reverse()
     return path
 
-def plot_profit(days: int, profits: list[float]):
-    plt.plot(range(days), profits)
+def plot_profit(days: int, greedy_profits: list[float] = None, monteCarlo_profits: list[float]=None):
     plt.xlabel('Days')
     plt.ylabel('Profit')
     plt.title('Profit over time')
-    #plt.show()
+    plt.plot(range(days), greedy_profits)
+    plt.plot(range(days), monteCarlo_profits)
+    plt.legend(['Greedy', 'Monte Carlo'])
+    plt.savefig('Figures/GreedyvsMonteCarlo.png')
+    plt.show()
         
         
 
@@ -42,18 +46,24 @@ def main():
     nodeCount = 20
     extraEdges = 0
     number_of_days = 1000
-    num_packages = 100
+    num_packages = 300
     graph = Graph(nodeCount, extraEdges)
     optimizer = OptimalScheduler(graph, graph.getBlankQMatrix(), epsilon=0.7)
-
-    profit = []
+    monteCarlo = MonteCarlo(graph, 100)
+    
+    greedy_profit = []
+    monteCarlo_profit = []
+    
     for _ in range(number_of_days):
-        packages = graph.getDeliveries(100, 400)
+        packages = graph.getDeliveries(num_packages, 400)
         
-        profit_for_day = optimizer.simulateDay(packages, 8 * 60)
-        profit.append(profit_for_day)
+        greedy_profit_for_day = optimizer.simulateDay(packages, 8 * 60)
+        montecarlo_profit_for_day = monteCarlo.simulateDay(packages, 8 * 60)
+        
+        greedy_profit.append(greedy_profit_for_day)
+        monteCarlo_profit.append(montecarlo_profit_for_day)
 
-    plot_profit(number_of_days, profit)
+    plot_profit(number_of_days, greedy_profit, monteCarlo_profit)
 
     real_paths = optimizer.real_paths
     q_graphs = optimizer.q_graphs

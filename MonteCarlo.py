@@ -12,20 +12,20 @@ class MonteCarlo:
     def breadth_first(self, source, target, Nodes: list[Node]):
         queue = []
         visited = {}
-        visited[source.getId()] =  np.inf
+        visited[source] =  np.inf
         queue.append(source)
     
         while (len(queue)> 0):
-            current = queue.pop(0) 
+            current = Nodes[int(queue.pop(0))] 
             for edge in current.getEdges():
                 to_node = edge.getTarget()
                 if to_node not in visited:
-                    queue.append(Nodes[int(to_node)])
+                    queue.append(to_node)
                     visited[to_node] = current.getId()
     
         path = [target]
     
-        while path[-1] != source.getId():
+        while path[-1] != source:
             path.append(visited[path[-1]])
     
         path.reverse()
@@ -37,7 +37,7 @@ class MonteCarlo:
         
         while totalTime < timeLimit:
             # Get a random package
-            package = np.random.choice(packages)
+            package = packages[np.random.randint(0, len(packages))]
             # Get the path from the package
             path = self.breadth_first(self.depot, package[0], self.graph.getNodes())
             # Get the time it takes to travel the path
