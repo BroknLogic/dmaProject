@@ -21,7 +21,8 @@ For multiple small packages, the team solves this problem by implementing the an
 4. Scheduling 
    - Our USGS utilizes a predictive priority algorithm (pay rate) to pick an optimal delivery schedule. This is done by calculating the priority (pay rate) after each delivery. Because the information about the road system is updated after each delivery, this guarantees the scheduler is picking deliveries that will yield the most profit before picking the next delivery to make.
 
-## Uncertainty Algorthims attempted: 
+## Uncertainty Algorthims attempted:
+
 We were unable to fully implement the Ant Colony algorithm with our node edge interface given the time constraint, however we did get these algorithms working but are unable to visualize them: 
 
 1. Bayes Rule
@@ -45,17 +46,9 @@ The outputs for this code is listed below:
 
 ## Results
 
-The following 
+The following figure shows the graph comparing the profit of the USGS and Monte Carlo Scheduler.
 
-## Running the Ant Colony Simulation:
+![image](./Figures/GreedyvsMonteCarlo.png)
 
-
-## Results:
-
-### Monte Carlo Simulation:
-![](./Figures/GreedyVsMonteCarlo.png)
-
-### Updating Semi-Greedy Scheduler:
-![](./Figures/USGS.gif)
 
 ### Ant Colony Algorithm:
