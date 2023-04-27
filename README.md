@@ -51,4 +51,3 @@ The following figure shows the graph comparing the profit of the USGS and Monte 
 ![image](./Figures/GreedyvsMonteCarlo.png)
 
 As can be seen, the USGS scheduler greatly outperforms the Monte Carlo scheduler. This is likely because the Monte Carlo scheduler is contrained to only picking paths that use the least amount of edges. The team attempted to make up for this by allowing the Monte Carlo scheduler to access the values of each road, however, the figure above shows it doesn't equate. In addtion, the figure above shows the Epsilon Greedy algorithm converges fairly fast to the average time to traverse each road. This is likely because several deliveries can be made each day meaning the algorithm is updating its information 100's of times a day.
-### Ant Colony Algorithm:
